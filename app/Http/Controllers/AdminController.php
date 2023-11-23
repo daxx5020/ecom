@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\admin;
 use Illuminate\Support\Facades\Session;
 
+
 class AdminController extends Controller
 {
     public function login(){
@@ -23,15 +24,22 @@ class AdminController extends Controller
         
         if ($admin && $request->password == $admin->password) {
             Session::put('admin', $admin);
-            return redirect('/dashboard');
+            return redirect('/admin/dashboard');
         }
 
         else{
+            
             return redirect()->back()->withErrors(['login_error' => 'Invalid credentials']);
         }
     }
 
     public function dashboard(){
         return view('admin.dashboard');
+    }
+
+    public function logout()
+    {
+        Session::forget('admin');
+        return redirect('/admin/login');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Session;
 
 class AdminAuthMiddleware
 {
@@ -15,6 +16,9 @@ class AdminAuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        if (Session::has('admin')) {
+            return $next($request);
+        }
+        return redirect('/admin/login')->withErrors(['login_error' => 'You are not logged in']);
     }
 }

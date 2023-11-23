@@ -19,7 +19,17 @@ Route::get('/', function () {
 });
 
 
-Route::get('/login',[AdminController::class,'login'])->name('adminlogin');
-Route::post('/login',[AdminController::class,'authentication'])->name('adminauth');
+// Route::get('/admin/login',[AdminController::class,'login'])->name('adminlogin');
+// Route::post('/admin/login',[AdminController::class,'authentication'])->name('adminauth');
 
-Route::get('/dashboard',[AdminController::class,'dashboard'])->name('adminlogin');
+Route::middleware(['guest'])->group(function () {
+    Route::get('/admin/login', [AdminController::class, 'login'])->name('adminlogin');
+    Route::post('/admin/authenticate', [AdminController::class, 'authentication'])->name('adminauth');
+});
+
+
+Route::middleware(['admin.auth'])->group(function () {
+    // Your dashboard route
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
+    Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+});
