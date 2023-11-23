@@ -38,7 +38,6 @@
               <input type="submit" value="Login"
                      class="bg-orange-700 text-white py-2 w-full rounded hover:bg-orange-800 cursor-pointer mt-2">
           </div>
-  
       </form>
     
   
