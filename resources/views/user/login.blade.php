@@ -22,15 +22,15 @@
 <body class=" bg-slate-900 min-h-screen flex items-center justify-center">
     <div class="max-w-md w-full p-6 bg-black rounded-lg shadow-lg">
 
-        <h1 class="text-2xl text-white font-semibold mb-6">Admin Login</h1>
-        <form method="post" action="{{ route('adminauth') }}" id="form">
+        <h1 class="text-2xl text-white font-semibold mb-6">User Login</h1>
+        <form method="post" action="{{ route('userauth') }}" id="form">
             @csrf
 
             <div class="mb-4">
-                <label for="email" class="block text-white font-bold mb-2">Email:</label>
-                <input type="text" id="email" name="email"
+                <label for="username" class="block text-white font-bold mb-2">Username:</label>
+                <input type="username" id="username" name="username" value="{{ old('username') }}"
                     class="w-full px-3 py-2 border rounded shadow-md focus:outline-none focus:ring focus:border-blue-300 bg-slate-300">
-                @error('email')
+                @error('username')
                     <div class="mt-2 mb-4 text-red-700">{{ $message }}</div>
                 @enderror
             </div>
@@ -62,12 +62,12 @@
 </html>
 
 
+
 <script>
     jQuery('#form').validate({
         rules: {
-            email: {
+            username: {
                 required: true,
-                email: true,
             },
             password: {
                 required: true,
