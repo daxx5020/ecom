@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\admin;
+use App\Models\category;
 use Illuminate\Support\Facades\Session;
 
 
@@ -41,5 +42,33 @@ class AdminController extends Controller
     {
         Session::forget('admin');
         return redirect('/admin/login');
+    }
+
+    public function category(){
+        $categories = Category::all();
+        return view('admin.add_category',compact('categories'));
+    }
+
+
+    public function addCategory(Request $request){
+
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+            'parent_category_id' => 'nullable|exists:categories,id',
+        ]);
+
+        Category::create($request->all());
+
+        return redirect()->route('admin.category')->with('success', 'Category created successfully.');
+
+    }
+
+    public function addproduct(){
+        $categories = Category::all();
+        return view('admin.add_product',compact('categories'));
+    }
+
+    public function viewproduct(){
+        return view('admin.view_product');
     }
 }

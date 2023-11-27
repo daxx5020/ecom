@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Session;
 
-class AdminAuthMiddleware
+class UserAuthMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,15 +16,12 @@ class AdminAuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Session::has('admin')) {
+        if (Session::has('user')) {
             return $next($request);
         }
         else{
-
-        
-        return redirect('/admin/login')->withErrors(['login_error' => 'You are not logged in']);
+        return redirect('/user/login')->withErrors(['login_error' => 'You are not logged in']);
     }
-
-        
+       
     }
 }

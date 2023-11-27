@@ -26,22 +26,38 @@ Route::get('/', function () {
 Route::middleware(['guest'])->prefix('admin')->group(function () {
     Route::get('/login', [AdminController::class, 'login'])->name('adminlogin');
     Route::post('/authenticate', [AdminController::class, 'authentication'])->name('adminauth');
-}); 
-
+});
 
 Route::middleware(['admin.auth'])->prefix('admin')->group(function () {
     // Your dashboard route
-    Route::get('/dashboard', [AdminController::class, 'dashboard']);
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+    Route::get('/category', [AdminController::class, 'category'])->name('admin.category');
+    Route::post('/category', [AdminController::class, 'addCategory'])->name('admin.addcategory');
+    Route::get('/addproduct', [AdminController::class, 'addproduct'])->name('admin.addproduct');
+    Route::get('/viewproduct', [AdminController::class, 'viewproduct'])->name('admin.viewproduct');
 });
 
 
 
-Route::prefix('user')->group(function () {
+
+
+Route::middleware(['guest'])->prefix('user')->group(function () {
     Route::get('/register', [UserController::class, 'register']);
     Route::post('/register', [UserController::class, 'registration'])->name('user_registration');
     Route::get('/login', [UserController::class, 'login']);
     Route::post('/login', [UserController::class, 'authentication'])->name('userauth');
+});
+
+Route::middleware(['user.auth'])->prefix('user')->group(function () {
+    // Your dashboard route
     Route::get('/dashboard', [UserController::class, 'dashboard']);
     Route::post('/logout', [UserController::class, 'logout'])->name('user.logout');
 });
+
+
+// Route::prefix('user')->group(function () {
+    
+//     Route::get('/dashboard', [UserController::class, 'dashboard']);
+//     Route::post('/logout', [UserController::class, 'logout'])->name('user.logout');
+// });

@@ -17,7 +17,7 @@
     </style>
 </head>
 
-<body class="bg-slate-900 min-h-screen flex items-center justify-center">
+<body class="bg-slate-900 min-h-screen flex items-center justify-center mt-10 mb-10">
     <div class="max-w-4xl w-full p-6 bg-black rounded-lg shadow-lg">
 
         <h1 class="text-2xl text-white font-semibold mb-6">User Registration</h1>
@@ -62,7 +62,7 @@
                 <label for="mobileno" class="block text-white font-bold mb-2">Mobile No:</label>
                 <input type="number" id="mobileno" name="mobileno" value="{{ old('mobileno') }}"
                     class="w-full px-3 py-2 border rounded shadow-md focus:outline-none focus:ring focus:border-blue-300 bg-slate-300"
-                    max="10">
+                    >
                 @error('mobileno')
                     <div class="mt-2 text-red-700">{{ $message }}</div>
                 @enderror
@@ -163,7 +163,7 @@
             },
             mobileno: {
                 required: true,
-                maxlength: 10,
+                // minlength: 11,
             },
         },
 

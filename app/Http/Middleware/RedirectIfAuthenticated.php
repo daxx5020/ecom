@@ -25,12 +25,20 @@ class RedirectIfAuthenticated
                 return redirect(RouteServiceProvider::HOME);
             }
         }
+        
         if (Session::has('admin')) {
             return redirect('/admin/dashboard');
         }
 
+        elseif (Session::has('user')) {
+            return redirect('/user/dashboard');
+        }
+        
+            return $next($request);
+        
 
 
-        return $next($request);
+
+        
     }
 }
