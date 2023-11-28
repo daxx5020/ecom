@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Include your Vite CSS here -->
     @vite('resources/css/app.css')
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <title>Admin Dashboard</title>
+    <style>
+      .error {
+          color: red;
+          width: 100%;
+          margin-bottom: 10px;
+
+      }
+  </style>
 </head>
 <body class="bg-slate-900 min-h-screen ">
     <nav class="bg-gray-800 py-3">

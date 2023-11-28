@@ -35,6 +35,7 @@ Route::middleware(['admin.auth'])->prefix('admin')->group(function () {
     Route::get('/category', [AdminController::class, 'category'])->name('admin.category');
     Route::post('/category', [AdminController::class, 'addCategory'])->name('admin.addcategory');
     Route::get('/addproduct', [AdminController::class, 'addproduct'])->name('admin.addproduct');
+    Route::post('/addproduct', [AdminController::class, 'storeproduct'])->name('admin.storeproduct');
     Route::get('/viewproduct', [AdminController::class, 'viewproduct'])->name('admin.viewproduct');
 });
 

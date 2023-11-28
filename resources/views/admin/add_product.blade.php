@@ -1,5 +1,9 @@
 @include('layouts.header')
-
+@if(session('success'))
+<div class="bg-green-500 text-white px-4 py-2 mb-4">
+    {{ session('success') }}
+</div>
+@endif
 {{-- <div class="min-h-screen flex items-center justify-center">
 <h2 class="text-white text-2xl">Add Products</h2>
 </div> --}}
@@ -8,7 +12,7 @@
 
 <div class="max-w-4xl w-full p-6 bg-black rounded-lg shadow-lg">
     <h1 class="text-2xl text-white font-semibold mb-6">Product Registration</h1>
-    <form method="post" action="" id="productForm" class="space-y-4">
+    <form method="post" action="{{ route('admin.storeproduct') }}" id="productForm" class="space-y-4" enctype="multipart/form-data" >
         @csrf
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -84,13 +88,16 @@
                 <div class="mt-4 flex text-sm leading-6 text-gray-600">
                   <label for="file-upload" class="relative cursor-pointer rounded-md bg-black font-semibold text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-orange-600 focus-within:ring-offset-2 hover:text-orange-500">
                     <span>Upload a file</span>
-                    <input id="product_image" name="product_image" type="file" class="sr-only">
+                    <input id="product_images" name="product_images[]" type="file" multiple >
                   </label>
                   <p class="pl-1 text-white">or drag and drop</p>
                 </div>
                 <p class="text-xs leading-5 text-white">PNG, JPG, GIF</p>
               </div>
             </div>
+            @error('product_images')
+                <div class="mt-2 text-red-700">{{ $message }}</div>
+            @enderror
           </div>
 
         <div>
@@ -105,11 +112,7 @@
     jQuery('#productForm').validate({
         rules: {
             product_name: 'required',
-            category_id: 'required',
             basic_price: 'required',
-            discounted_price: 'required',
-            small_description: 'required',
-            detail_description: 'required',
         },
 
         submitHandler: function (form) {
