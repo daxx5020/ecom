@@ -53,7 +53,6 @@ class AdminController extends Controller
         return view('admin.add_category',compact('categories'));
     }
 
-
     public function addCategory(Request $request){
 
         $request->validate([
@@ -127,5 +126,17 @@ class AdminController extends Controller
         $products = product::with('category')->get();
         $data = compact("products");
         return view('admin.view_product')->with($data);
+    }
+
+    public function deleteproduct($id){
+        $product = product::find($id);
+
+    if (!$product) {
+        return redirect()->back()->with('warning','product not found');
+    }
+
+    $product->delete();
+
+    return redirect()->back()->with('success','product deleted successfully');
     }
 }

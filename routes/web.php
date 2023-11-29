@@ -37,9 +37,8 @@ Route::middleware(['admin.auth'])->prefix('admin')->group(function () {
     Route::get('/addproduct', [AdminController::class, 'addproduct'])->name('admin.addproduct');
     Route::post('/addproduct', [AdminController::class, 'storeproduct'])->name('admin.storeproduct');
     Route::get('/viewproduct', [AdminController::class, 'viewproduct'])->name('admin.viewproduct');
+    Route::delete('/delete/{id}', [AdminController::class, 'deleteproduct'])->name('admin.deleteproduct');    
 });
-
-
 
 
 

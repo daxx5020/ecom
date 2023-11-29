@@ -1,5 +1,9 @@
 @include('layouts.header')
-
+{{-- @if(session('success'))
+<div class="bg-red-500 text-white px-4 py-2 mb-4">
+    {{ session('success') }}
+</div>
+@endif --}}
 <!-- component -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css" />
@@ -217,7 +221,10 @@
                               ">
                                             Edit
                                         </a>
-                                        <a href="javascript:void(0)"
+                                        <a 
+                                        href="#"
+                                        onclick="deleteProduct({{ $product->id }})"    
+                                        id="deleteLink"
                                             class="
                               border border-primary
                               py-2
@@ -246,3 +253,38 @@
 </body>
 
 </html>
+
+
+<script>
+    function deleteProduct(productId) {
+        // if (confirm('Are you sure you want to delete this product?')) {
+            var url = '/admin/delete/' + productId;
+
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle success, you might want to update the UI or show a message
+                var divToRemove = document.getElementById('myDiv');
+                if (divToRemove) {
+                    divToRemove.remove();
+                }
+                alert(data.message);
+            })
+            .catch(error => {
+                // Handle errors here
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        // }
+    }
+</script>
