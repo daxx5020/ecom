@@ -20,11 +20,10 @@ Route::get('/', function () {
 });
 
 
-// Route::get('/admin/login',[AdminController::class,'login'])->name('adminlogin');
-// Route::post('/admin/login',[AdminController::class,'authentication'])->name('adminauth');
-
 Route::middleware(['guest'])->prefix('admin')->group(function () {
     Route::get('/login', [AdminController::class, 'login'])->name('adminlogin');
+    Route::get('/register', [AdminController::class, 'register'])->name('adminregister');
+    Route::post('/register', [AdminController::class, 'store'])->name('adminstore');
     Route::post('/authenticate', [AdminController::class, 'authentication'])->name('adminauth');
 });
 
@@ -34,8 +33,9 @@ Route::middleware(['admin.auth'])->prefix('admin')->group(function () {
     Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
     Route::get('/category', [AdminController::class, 'category'])->name('admin.category');
     Route::post('/category', [AdminController::class, 'addCategory'])->name('admin.addcategory');
-    Route::get('/addproduct', [AdminController::class, 'addproduct'])->name('admin.addproduct');
+    Route::get('/addproduct/{id?}', [AdminController::class, 'addproduct'])->name('admin.addproduct');
     Route::post('/addproduct', [AdminController::class, 'storeproduct'])->name('admin.storeproduct');
+    Route::post('/updateproduct/{id}', [AdminController::class, 'updateproduct'])->name('admin.updateproduct');
     Route::get('/viewproduct', [AdminController::class, 'viewproduct'])->name('admin.viewproduct');
     Route::delete('/delete/{id}', [AdminController::class, 'deleteproduct'])->name('admin.deleteproduct');    
 });

@@ -1,9 +1,10 @@
 @include('layouts.header')
-{{-- @if(session('success'))
-<div class="bg-red-500 text-white px-4 py-2 mb-4">
+
+@if(session('success'))
+<div class="bg-green-500 text-white px-4 py-2 mb-4">
     {{ session('success') }}
 </div>
-@endif --}}
+@endif
 <!-- component -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css" />
@@ -123,7 +124,7 @@
                         </thead>
                         <tbody>
                             @foreach ($products as $product)
-                                <tr>
+                                <tr class="" id="productRow{{ $product->id }}">
                                     <td
                                         class="
                            text-center text-dark
@@ -209,7 +210,7 @@
                            bg-white
                            border-b border-r border-[#E8E8E8]
                            ">
-                                        <a href="javascript:void(0)"
+                                        <a href="/admin/addproduct/{{$product->id}}"
                                             class="
                               border border-primary
                               py-2
@@ -255,9 +256,9 @@
 </html>
 
 
-<script>
+{{-- <script>
     function deleteProduct(productId) {
-        // if (confirm('Are you sure you want to delete this product?')) {
+        if (confirm('Are you sure you want to delete this product?')) {
             var url = '/admin/delete/' + productId;
 
             fetch(url, {
@@ -285,6 +286,45 @@
                 // Handle errors here
                 console.error('There was a problem with the fetch operation:', error);
             });
-        // }
+        }
+    }
+</script> --}}
+
+
+
+<script>
+    function deleteProduct(productId) {
+        if (confirm('Are you sure you want to delete this product?')) {
+            var url = '/admin/delete/' + productId;
+
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Handle success
+                alert(data.message);
+
+                // Remove the product row from the table
+                var productRow = document.getElementById('productRow' + productId);
+                if (productRow) {
+                    productRow.remove();
+                }
+                
+            })
+            .catch(error => {
+                // Handle errors here
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
     }
 </script>

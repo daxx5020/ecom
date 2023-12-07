@@ -52,13 +52,14 @@
               <div class="hidden sm:ml-6 sm:block">
                 <div class="flex space-x-4">
                   <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                  <a href="/admin/dashboard" class="bg-orange-700 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
-                  <a href="{{route('admin.addproduct')}}" class="text-gray-300 hover:bg-orange-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Add Products</a>
-                  <a href="{{route('admin.category')}}" class="text-gray-300 hover:bg-orange-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Add Category</a>
-                  <a href="{{route('admin.viewproduct')}}" class="text-gray-300 hover:bg-orange-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">View Products</a>
+                  <a href="/admin/dashboard" class="{{ request()->routeIs('admin.dashboard') ? 'bg-orange-700 text-white' : 'text-white hover:bg-orange-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
+                  <a href="{{route('admin.addproduct')}}" class="{{ request()->routeIs('admin.addproduct') ? 'bg-orange-700 text-white' : 'text-white hover:bg-orange-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium">Add Products</a>
+                  <a href="{{route('admin.category')}}" class="{{ request()->routeIs('admin.category') ? 'bg-orange-700 text-white' : 'text-white hover:bg-orange-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium">Add Category</a>
+                  <a href="{{route('admin.viewproduct')}}" class="{{ request()->routeIs('admin.viewproduct') ? 'bg-orange-700 text-white' : 'text-white hover:bg-orange-700 hover:text-white' }} rounded-md px-3 py-2 text-sm font-medium">View Products</a>
                 </div>
               </div>
             </div>
+            
             <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                 <span class="absolute -inset-1.5"></span>
@@ -104,6 +105,6 @@
 
       <script>
         function confirmLogout() {
-            alert("are you sure want to logout")
+          confirm("are you sure want to logout")
         }
     </script>

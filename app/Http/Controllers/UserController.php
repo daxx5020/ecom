@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\usermodel;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -18,7 +19,7 @@ class UserController extends Controller
             'firstname' => 'required',
             'lastname' => 'required',
             'email' => 'required|email|unique:usermodels,email',
-            'mobileno' => 'required|unique:usermodels,mobileno',
+            // 'mobileno' => 'required|unique:usermodels,mobileno|max:15',
             'username' => 'required|unique:usermodels,username',
             'password' => 'required|min:8|max:15',
         ]);
@@ -33,7 +34,7 @@ class UserController extends Controller
             'email' => $request->email,
             'mobileno' => $request->mobileno,
             'username' => $request->username,
-            'password' => $request->password,
+            'password' => bcrypt($request->password),
             'address_line_1' => $request->address_line_1,
             'address_line_2' => $request->address_line_2,
         ]);
@@ -56,11 +57,10 @@ class UserController extends Controller
         
         $user = usermodel::where('username', $request->username)->first();
         
-        if ($user && $request->password == $user->password) {
+        if ($user && Hash::check($request->password, $user->password)) {
             Session::put('user', $user);
             return redirect('/user/dashboard');
         }
-
         else{
             
             return redirect()->back()->withErrors(['login_error' => 'Invalid credentials'])->withInput();

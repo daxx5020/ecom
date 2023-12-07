@@ -161,10 +161,6 @@
                 required: true,
                 minlength: 8,
             },
-            mobileno: {
-                required: true,
-                // minlength: 11,
-            },
         },
 
         submitHandler: function(form) {
