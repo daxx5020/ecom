@@ -20,6 +20,9 @@ Route::get('/', function () {
 });
 
 
+// admin routes
+
+
 Route::middleware(['guest'])->prefix('admin')->group(function () {
     Route::get('/login', [AdminController::class, 'login'])->name('adminlogin');
     Route::get('/register', [AdminController::class, 'register'])->name('adminregister');
@@ -42,6 +45,8 @@ Route::middleware(['admin.auth'])->prefix('admin')->group(function () {
 
 
 
+// user routes
+
 Route::middleware(['guest'])->prefix('user')->group(function () {
     Route::get('/register', [UserController::class, 'register']);
     Route::post('/register', [UserController::class, 'registration'])->name('user_registration');
@@ -54,10 +59,3 @@ Route::middleware(['user.auth'])->prefix('user')->group(function () {
     Route::get('/dashboard', [UserController::class, 'dashboard']);
     Route::post('/logout', [UserController::class, 'logout'])->name('user.logout');
 });
-
-
-// Route::prefix('user')->group(function () {
-    
-//     Route::get('/dashboard', [UserController::class, 'dashboard']);
-//     Route::post('/logout', [UserController::class, 'logout'])->name('user.logout');
-// });

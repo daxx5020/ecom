@@ -54,6 +54,10 @@
                 @enderror
             </div>
 
+            <div class="mb-4">
+                <a class=" text-blue-500 underline hover:text-blue-700" href="/user/register">Sign up</a>
+            </div>
+
             @if ($errors->has('login_error'))
                 <div class="mt-2 mb-4 text-red-700">
                     {{ $errors->first('login_error') }}

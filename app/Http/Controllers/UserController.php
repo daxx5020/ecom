@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\usermodel;
+use App\Models\emailverification;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use mail;
 
 class UserController extends Controller
 {
@@ -40,8 +42,6 @@ class UserController extends Controller
         ]);
         
         return redirect()->back()->with('success', 'Record added successfully');
-        
-
     }
 
     public function login(){
@@ -57,7 +57,7 @@ class UserController extends Controller
         
         $user = usermodel::where('username', $request->username)->first();
         
-        if ($user && Hash::check($request->password, $user->password)) {
+       if($user && Hash::check($request->password, $user->password)){
             Session::put('user', $user);
             return redirect('/user/dashboard');
         }
@@ -76,4 +76,5 @@ class UserController extends Controller
         Session::forget('user');
         return redirect('/user/login');
     }
+
 }

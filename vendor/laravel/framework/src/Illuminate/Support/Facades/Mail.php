@@ -75,6 +75,7 @@ class Mail extends Facade
         return tap(new MailFake($actualMailManager), function ($fake) {
             static::swap($fake);
         });
+
     }
 
     /**
