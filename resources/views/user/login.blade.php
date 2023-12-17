@@ -29,10 +29,10 @@
                     </div>
 
                     <div class="my-3">
-                        <label class="block text-md mb-2" for="username">Username:</label>
+                        <label class="block text-md mb-2" for="loginname">Username/Email:</label>
                         <input class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none @error('username') border-red-600  @enderror" type="text"
-                            id="username" name="username" value="{{ old('username') }}" placeholder="Username">
-                        @error('username')
+                            id="loginname" name="loginname" value="{{ old('loginname') }}" placeholder="Username/Email">
+                        @error('loginname')
                             <div class="mt-2 mb-4 text-red-700">{{ $message }}</div>
                         @enderror
                     </div>
@@ -83,16 +83,30 @@
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 
 <script>
+    
+    var customErrorMessages = {
+    loginname: {
+        required: 'Username or Email is required.',
+    },
+    password: {
+        required: 'Password is required.',
+        minlength: 'Password must be at least {0} characters.',
+        maxlength: 'Password must not be more than {0} characters.',
+    },
+};
+messages: customErrorMessages,
+
     jQuery('#form').validate({
         rules: {
-            username: {
+            loginname: {
                 required: true,
             },
             password: {
                 required: true,
                 minlength: 8,
-            },
+            },  
         },
+        messages: customErrorMessages,
         
     highlight: function(element) {
         // Add the red border class when an error occurs

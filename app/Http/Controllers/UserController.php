@@ -46,7 +46,6 @@ class UserController extends Controller
     public function checkUsername(Request $request)
     {
         $username = $request->input('username');
-
         $user = usermodel::where('username', $username)->first();
 
         if ($user) {
@@ -62,14 +61,21 @@ class UserController extends Controller
 
     public function authentication(request $request){
         
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required|min:8|max:15',
-        ]);
+            $customMessages = [
+                'loginname.required' => 'Username or Email is required.',
+                'password.required' => 'Password is required.',
+                'password.min' => 'Password must be at least :min characters.',
+                'password.max' => 'Password must not be more than :max characters.',
+            ];
         
-        $user = usermodel::where('username', $request->username)->first();
+            $request->validate([
+                'loginname' => 'required',
+                'password' => 'required|min:8|max:15',
+            ], $customMessages);
         
-       if($user && $user->is_verified == 0){
+        $user = usermodel::where('username', $request->loginname)->orWhere('email', $request->loginname)->first();
+
+        if($user && $user->is_verified == 0){
         $this->sendOtp($user);
         return redirect("/user/verification/".$user->id);
        }
