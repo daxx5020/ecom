@@ -5,67 +5,82 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @vite('resources/css/app.css')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
     <style>
         .error {
             color: red;
-            width: 100%;
-            margin-bottom: 10px;
-
+            display: block;
+            margin-bottom: 0.5rem;
         }
     </style>
-
 </head>
 
-<body class=" bg-slate-900 min-h-screen flex items-center justify-center">
-    <div class="max-w-md w-full p-6 bg-black rounded-lg shadow-lg">
+<body class="min-h-screen bg-no-repeat bg-cover bg-center"
+    style="background-image: url('https://images.unsplash.com/photo-1486520299386-6d106b22014b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80')">
+    <div class="flex justify-end">
+        <div class="bg-white min-h-screen w-1/2 flex justify-center items-center">
+            <div>
 
-        <h1 class="text-2xl text-white font-semibold mb-6">User Login</h1>
-        <form method="post" action="{{ route('userauth') }}" id="form">
-            @csrf
+                <form method="post" action="{{ route('userauth') }}" id="form">
+                    @csrf
 
-            <div class="mb-4">
-                <label for="username" class="block text-white font-bold mb-2">Username:</label>
-                <input type="username" id="username" name="username" value="{{ old('username') }}"
-                    class="w-full px-3 py-2 border rounded shadow-md focus:outline-none focus:ring focus:border-blue-300 bg-slate-300">
-                @error('username')
-                    <div class="mt-2 mb-4 text-red-700">{{ $message }}</div>
-                @enderror
+                    <div>
+                        <span class="text-sm text-gray-900">Welcome back</span>
+                        <h1 class="text-2xl font-bold">Login to your account</h1>
+                    </div>
+
+                    <div class="my-3">
+                        <label class="block text-md mb-2" for="username">Username:</label>
+                        <input class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none" type="text"
+                            id="username" name="username" value="{{ old('username') }}" placeholder="Username">
+                        @error('username')
+                            <div class="mt-2 mb-4 text-red-700">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mt-5">
+                        <label class="block text-md mb-2" for="password">Password:</label>
+                        <input class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none" type="password"
+                            id="password" name="password" placeholder="Password">
+                        @error('password')
+                            <div class="mt-2 mb-4 text-red-700">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="flex justify-between pt-4">
+                        <div>
+                            <input class="cursor-pointer" type="radio" name="rememberme">
+                            <span class="text-sm">Remember Me</span>
+                        </div>
+                        <span class="text-sm text-blue-700 hover:underline cursor-pointer">Forgot password?</span>
+                    </div>
+                    <div class="">
+                        <button class="mt-4 mb-3 w-full bg-green-500 hover:bg-green-400 text-white py-2 rounded-md transition duration-100"
+                            id="loginbutton">Login now</button>
+                        <div class="flex space-x-2 justify-center items-end bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-md transition duration-100">
+                            <img class="h-5 cursor-pointer" src="https://i.imgur.com/arC60SB.png" alt="">
+                            <button>Or sign-in with Google</button>
+                        </div>
+                    </div>
+                </form>
+                @if ($errors->has('login_error'))
+                    <div class="mt-2 mb-4 text-red-700">
+                        {{ $errors->first('login_error') }}
+                    </div>
+                @endif
+                <p class="mt-8">Don't have an account? 
+                    <a href="/user/register"> <span class="cursor-pointer text-sm text-blue-600">Sign Up</span></p> </a>
             </div>
-
-            <div class="mb-4">
-                <label for="password" class="block text-white font-bold mb-2">Password:</label>
-                <input type="password" id="password" name="password"
-                    class="w-full px-3 py-2 border rounded shadow-md focus:outline-none focus:ring focus:border-blue-300 bg-slate-300">
-                @error('password')
-                    <div class="mt-2 mb-4 text-red-700">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-4">
-                <a class=" text-blue-500 underline hover:text-blue-700" href="/user/register">Sign up</a>
-            </div>
-
-            @if ($errors->has('login_error'))
-                <div class="mt-2 mb-4 text-red-700">
-                    {{ $errors->first('login_error') }}
-                </div>
-            @endif
-
-            <div class="mb-4">
-                <input type="submit" value="Login" id="loginbutton"
-                    class="bg-orange-700 text-white py-2 w-full rounded hover:bg-orange-800 cursor-pointer mt-2">
-            </div>
-        </form>
+        </div>
     </div>
-
+    </div>
 </body>
 
 </html>
 
-
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
 
 <script>
     jQuery('#form').validate({
@@ -78,7 +93,6 @@
                 minlength: 8,
             },
         },
-
         submitHandler: function(form) {
             form.submit();
         }

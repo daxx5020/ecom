@@ -52,6 +52,9 @@ Route::middleware(['guest'])->prefix('user')->group(function () {
     Route::post('/register', [UserController::class, 'registration'])->name('user_registration');
     Route::get('/login', [UserController::class, 'login']);
     Route::post('/login', [UserController::class, 'authentication'])->name('userauth');
+    Route::get('/verification/{id}',[UserController::class,'verification']);
+    Route::post('/verified',[UserController::class,'verifiedOtp'])->name('verifiedOtp');
+    Route::get('/resend-otp',[UserController::class,'resendOtp'])->name('resendOtp');
 });
 
 Route::middleware(['user.auth'])->prefix('user')->group(function () {
