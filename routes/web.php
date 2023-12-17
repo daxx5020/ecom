@@ -50,6 +50,7 @@ Route::middleware(['admin.auth'])->prefix('admin')->group(function () {
 Route::middleware(['guest'])->prefix('user')->group(function () {
     Route::get('/register', [UserController::class, 'register']);
     Route::post('/register', [UserController::class, 'registration'])->name('user_registration');
+    Route::post('/check-username', [UserController::class, 'checkUsername'])->name('check-username');
     Route::get('/login', [UserController::class, 'login']);
     Route::post('/login', [UserController::class, 'authentication'])->name('userauth');
     Route::get('/verification/{id}',[UserController::class,'verification']);

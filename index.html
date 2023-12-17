@@ -4,7 +4,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite('resources/css/app.css')
     <style>
         .error {
             color: red;
@@ -20,27 +19,24 @@
         <div class="bg-white min-h-screen w-1/2 flex justify-center items-center">
             <div>
 
-                <form method="post" action="{{ route('userauth') }}" id="form">
+                <form method="post" id="verificationForm">
                     @csrf
+                    <p id="message_error" style="color:red;"></p>
+                    <p id="message_success" style="color:green;"></p>
 
                     <div>
                         <span class="text-sm text-gray-900">Welcome back</span>
-                        <h1 class="text-2xl font-bold">Login to your account</h1>
+                        <h1 class="text-2xl font-bold">Enter your otp</h1>
                     </div>
 
                     <div class="my-3">
                         <label class="block text-md mb-2" for="username">Username:</label>
-                        <input class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none @error('username') border-red-600  @enderror" type="text"
-                            id="username" name="username" value="{{ old('username') }}" placeholder="Username">
-                        @error('username')
-                            <div class="mt-2 mb-4 text-red-700">{{ $message }}</div>
-                        @enderror
+                        <input class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none"type="hidden" name="email" value="{{ $email }}">
                     </div>
 
                     <div class="mt-5">
-                        <label class="block text-md mb-2" for="password">Password:</label>
-                        <input class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none @error('password') border-red-600  @enderror" type="password"
-                            id="password" name="password" placeholder="Password">
+                        <label class="block text-md mb-2" for="Otp">Otp:</label>
+                        <input class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none" type="number" name="otp" placeholder="Enter OTP" required>
                         @error('password')
                             <div class="mt-2 mb-4 text-red-700">{{ $message }}</div>
                         @enderror
@@ -55,13 +51,15 @@
                     </div>
                     <div class="">
                         <button class="mt-4 mb-3 w-full bg-green-500 hover:bg-green-400 text-white py-2 rounded-md transition duration-100"
-                            id="loginbutton">Login now</button>
+                        type="submit" value="Verify">Submit Otp</button>
                         <div class="flex space-x-2 justify-center items-end bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-md transition duration-100">
                             <img class="h-5 cursor-pointer" src="https://i.imgur.com/arC60SB.png" alt="">
                             <button>Or sign-in with Google</button>
                         </div>
                     </div>
                 </form>
+                <button class="mt-4 mb-3 w-full bg-green-500 hover:bg-green-400 text-white py-2 rounded-md transition duration-100"
+                id="resendOtpVerification">Resend Otp</button>
                 @if ($errors->has('login_error'))
                     <div class="mt-2 mb-4 text-red-700">
                         {{ $errors->first('login_error') }}
@@ -77,35 +75,60 @@
 
 </html>
 
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
-
 <script>
-    jQuery('#form').validate({
-        rules: {
-            username: {
-                required: true,
-            },
-            password: {
-                required: true,
-                minlength: 8,
-            },
-        },
-        
-    highlight: function(element) {
-        // Add the red border class when an error occurs
-        $(element).addClass('border-red-600');
-    },
 
-    unhighlight: function(element) {
-        // Remove the red border class when the error is cleared
-        $(element).removeClass('border-red-600');
-    },
+    $(document).ready(function(){
+        $('#verificationForm').submit(function(e){
+            e.preventDefault();
 
-    submitHandler: function(form) {
-        form.submit();
-    }
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url:"{{ route('verifiedOtp') }}",
+                type:"POST",
+                data: formData,
+                success:function(res){
+                    if(res.success){
+                        alert(res.msg);
+                        window.open("/","_self");
+                    }
+                    else{
+                        $('#message_error').text(res.msg);
+                        setTimeout(() => {
+                            $('#message_error').text('');
+                        }, 3000);
+                    }
+                }
+            });
+
+        });
+
+        $('#resendOtpVerification').click(function(){
+            $(this).text('Wait...');
+            var userMail = @json($email);
+
+            $.ajax({
+                url:"{{ route('resendOtp') }}",
+                type:"GET",
+                data: {email:userMail },
+                success:function(res){
+                    $('#resendOtpVerification').text('Resend Verification OTP');
+                    if(res.success){
+                        timer();
+                        $('#message_success').text(res.msg);
+                        setTimeout(() => {
+                            $('#message_success').text('');
+                        }, 3000);
+                    }
+                    else{
+                        $('#message_error').text(res.msg);
+                        setTimeout(() => {
+                            $('#message_error').text('');
+                        }, 3000);
+                    }
+                }
+            });
+
+        });
     });
 </script>

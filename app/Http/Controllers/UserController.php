@@ -43,6 +43,19 @@ class UserController extends Controller
         return redirect("/user/verification/".$user->id);
     }
 
+    public function checkUsername(Request $request)
+    {
+        $username = $request->input('username');
+
+        $user = usermodel::where('username', $username)->first();
+
+        if ($user) {
+            return response()->json(['message' => 'Username already exists'], 422);
+        }
+
+        return response()->json(['message' => 'Username is available'], 200);
+    }
+
     public function login(){
         return view('user.login');
     }
@@ -134,7 +147,7 @@ class UserController extends Controller
             $currentTime = time();
             $time = $otpData->created_at;
 
-            if($currentTime >= $time && $time >= $currentTime - (90+5)){//90 seconds
+            if($currentTime >= $time && $time >= $currentTime - (300)){//90 seconds
                 usermodel::where('id',$user->id)->update([
                     'is_verified' => 1
                 ]);
@@ -154,15 +167,11 @@ class UserController extends Controller
 
         $currentTime = time();
         $time = $otpData->created_at;
+        
 
-        if($currentTime >= $time && $time >= $currentTime - (90+5)){//90 seconds
-            return response()->json(['success' => false,'msg'=> 'Please try after some time']);
-        }
-        else{
-
-            $this->sendOtp($user);//OTP SEND
-            return response()->json(['success' => true,'msg'=> 'OTP has been sent']);
-        }
+        $this->sendOtp($user);//OTP SEND
+        return response()->json(['success' => true,'msg'=> 'OTP has been sent']);
+        
 
     }
 

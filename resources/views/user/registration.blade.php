@@ -11,8 +11,7 @@
     <style>
         .error {
             color: red;
-            display: block;
-            margin-bottom: 0.5rem;
+            display: block; 
         }
     </style>
 </head>
@@ -39,7 +38,7 @@
                         <div >
                             <label for="firstname" class="block text-md mb-2">First Name:</label>
                             <input type="text" id="firstname" name="firstname" value="{{ old('firstname') }}"
-                                class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none">
+                                class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none @error('firstname') border-red-600  @enderror">
                                 @error('firstname')
                                 <div class="mt-2 text-red-700">{{ $message }}</div>
                                 @enderror
@@ -48,7 +47,7 @@
                         <div>
                             <label for="email" class="block text-md mb-2">Email:</label>
                             <input type="text" id="email" name="email" value="{{ old('email') }}"
-                                class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none">
+                                class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none @error('email') border-red-600  @enderror " >
                             @error('email')
                             <div class="mt-2 text-red-700">{{ $message }}</div>
                             @enderror
@@ -59,7 +58,9 @@
                         <div>
                             <label for="username" class="block text-md mb-2">Username:</label>
                             <input type="text" id="username" name="username" value="{{ old('username') }}"
-                                class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none">
+                                class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none @error('username') border-red-600  @enderror">
+                                <div id="username-feedback" class="mt-2"></div>
+
                             @error('username')
                             <div class="mt-2 text-red-700">{{ $message }}</div>
                             @enderror
@@ -68,7 +69,7 @@
                         <div>
                             <label for="password" class="block text-md mb-2">Password:</label>
                             <input type="password" id="password" name="password"
-                                class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none">
+                                class="px-4 w-full border-2 py-2 rounded-md text-sm outline-none @error('password') border-red-600  @enderror">
                             @error('password')
                             <div class="mt-2 text-red-700">{{ $message }}</div>
                             @enderror
@@ -95,23 +96,65 @@
 
 </html>
 
-{{-- <script>
-    jQuery('#form').validate({
-        rules: {
-            firstname: 'required',
-            username: 'required',
-            email: {
-                required: true,
-                email: true,
-            },
-            password: {
-                required: true,
-                minlength: 8,
-            },
+<script>
+   jQuery('#form').validate({
+    rules: {
+        firstname: 'required',
+        username: 'required',
+        email: {
+            required: true,
+            email: true,
         },
+        password: {
+            required: true,
+            minlength: 8,
+        },
+    },
 
-        submitHandler: function(form) {
-            form.submit();
-        }
+    highlight: function(element) {
+        // Add the red border class when an error occurs
+        $(element).addClass('border-red-600');
+    },
+
+    unhighlight: function(element) {
+        // Remove the red border class when the error is cleared
+        $(element).removeClass('border-red-600');
+    },
+
+    submitHandler: function(form) {
+        form.submit();
+    }
+});
+
+</script>
+
+<!-- Update this script after your form -->
+<script>
+    $(document).ready(function() {
+        var usernameInput = $('#username');
+        var feedbackDiv = $('#username-feedback');
+
+        usernameInput.on('input', function() {
+            var username = usernameInput.val();
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('check-username') }}',
+                data: { '_token': '{{ csrf_token() }}', 'username': username },
+                success: function(response) {
+                    // Username is available, show success message in green
+                    feedbackDiv.text(response.message).removeClass('text-red-700').addClass('text-green-700');
+                },
+                error: function(xhr, status, error) {
+                    // Username already exists, show error message in red
+                    var errorMessage = JSON.parse(xhr.responseText).message;
+                    feedbackDiv.text(errorMessage).removeClass('text-green-700').addClass('text-red-700');
+                }
+            });
+        });
     });
-</script> --}}
+</script>
+
+
+
+
